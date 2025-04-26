@@ -198,14 +198,16 @@
 </div>
 
 <script>
-  const isTelegramMiniApp = window.Telegram?.WebApp?.initData || 
-                            navigator.userAgent.includes("Telegram") || 
-                            window.navigator.userAgentData?.brands?.some(b => b.brand.includes('Telegram'));
+  // Correct Telegram Mini App detection
+  const isTelegramMiniApp = typeof window.Telegram !== 'undefined' && typeof window.Telegram.WebApp !== 'undefined';
 
   if (!isTelegramMiniApp) {
     document.getElementById('player').style.display = 'none';
     document.getElementById('miniAppOnlyMessage').style.display = 'flex';
   } else {
+    // Initialize Telegram WebApp
+    Telegram.WebApp.ready();
+
     const playerInstance = jwplayer("player").setup({
       file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
       autostart: true,
@@ -231,7 +233,7 @@
       joinModal.style.display = 'none';
     };
 
-    // Keep playing when tab is changed
+    // Auto-resume when user returns to tab
     document.addEventListener("visibilitychange", function() {
       if (!document.hidden && playerInstance.getState() === 'paused') {
         setTimeout(() => playerInstance.play(), 300);
