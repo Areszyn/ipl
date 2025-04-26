@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live IPL Streaming</title>
+  <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+    }
+    #player {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
+    .only-miniapp {
+      display: none;
+      color: white;
+      text-align: center;
+      margin-top: 40vh;
+      font-size: 20px;
+      font-family: sans-serif;
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 500px;
+    }
+    .modal button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .modal .cancel-btn {
+      background-color: red;
+      color: white;
+    }
+    .modal .open-btn {
+      background-color: green;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="player"></div>
+<div id="onlyMiniAppMessage" class="only-miniapp">
+  Please open via Telegram Mini App:<br>
+  <a href="https://t.me/lifegrambot/Live" style="color: #00acee;">Click here to open</a>
+</div>
+
+<!-- Modal to Force Join Telegram Channel -->
+<div id="joinModal" class="modal">
+  <div class="modal-content">
+    <h2>Join our Telegram Channel for More Links!</h2>
+    <p>Click "Open" to join our channel.</p>
+    <button class="open-btn" id="openTelegram">Open</button>
+    <button class="cancel-btn" id="cancelJoin">Cancel</button>
+  </div>
+</div>
+
+<script>
+  // Detect if opened inside Telegram Mini App
+  const isTelegramMiniApp = window.Telegram?.WebApp?.initData || navigator.userAgent.includes("Telegram");
+
+  if (!isTelegramMiniApp) {
+    // If NOT inside mini app, show message
+    document.getElementById('player').style.display = 'none';
+    document.getElementById('onlyMiniAppMessage').style.display = 'block';
+  } else {
+    // Inside Mini App: setup JWPlayer
+    const playerInstance = jwplayer("player").setup({
+      file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",  // <<< Your M3U8 link here
+      autostart: true,
+      mute: true,  // Start muted to allow autoplay on all browsers
+      controls: true,
+      repeat: true,
+      width: "100%",
+      height: "100%",
+      stretching: "uniform",
+      logo: {
+        file: "", // optional logo
+        link: ""
+      },
+      skin: { name: "netflix" }
+    });
+
+    // Show Join Telegram Modal to force user
+    const joinModal = document.getElementById('joinModal');
+    joinModal.style.display = 'flex';
+
+    // Open button click event
+    document.getElementById('openTelegram').onclick = function() {
+      window.location.href = "https://t.me/neprosz";  // Telegram channel link
+    };
+
+    // Cancel button click event
+    document.getElementById('cancelJoin').onclick = function() {
+      // Hide modal, allow them to continue without joining
+      joinModal.style.display = 'none';
+    };
+
+    // Force play when minimized
+    document.addEventListener("visibilitychange", function() {
+      if (document.hidden) {
+        playerInstance.play(); // Force continue playing
+      }
+    });
+
+    // Optional: Unmute automatically after user interaction
+    document.addEventListener('click', function() {
+      playerInstance.setMute(false);
+    }, { once: true });
+  }
+</script>
+
+</body>
+</html>
