@@ -20,10 +20,12 @@
       width: 100%;
       height: 100%;
       position: absolute;
+      display: none; /* Hidden by default */
     }
     
+    /* Mini App Only Message */
     .mini-app-only {
-      display: none;
+      display: flex;
       position: fixed;
       top: 0;
       left: 0;
@@ -50,101 +52,56 @@
       font-size: 28px;
       margin-bottom: 20px;
       color: #fff;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    }
-    
-    .mini-app-only p {
-      font-size: 18px;
-      margin-bottom: 30px;
-      line-height: 1.6;
     }
     
     .telegram-btn {
-      display: inline-block;
       background: #0088cc;
       color: white;
       padding: 15px 30px;
       border-radius: 50px;
       text-decoration: none;
       font-weight: bold;
-      font-size: 18px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      border: none;
-      cursor: pointer;
-      margin-top: 15px;
+      margin-top: 20px;
+      display: inline-block;
     }
     
+    /* Join Modal */
     .join-modal {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
+      background: rgba(0,0,0,0.9);
+      z-index: 1001;
       justify-content: center;
       align-items: center;
+    }
+    
+    .modal-content {
+      background: #222;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 90%;
       text-align: center;
-      z-index: 1001;
-      animation: fadeIn 0.3s ease-out;
-      display: flex;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    .modal-card {
-      background: linear-gradient(145deg, #121212 0%, #1e1e1e 100%);
-      padding: 30px;
-      border-radius: 15px;
-      width: 90%;
-      max-width: 450px;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      animation: slideUp 0.4s ease-out;
-    }
-    
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    
-    .modal-card h2 {
-      color: #fff;
-      font-size: 24px;
-      margin-bottom: 15px;
-      font-weight: 600;
-    }
-    
-    .modal-card p {
-      color: #aaa;
-      font-size: 16px;
-      margin-bottom: 25px;
-      line-height: 1.5;
     }
     
     .modal-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
       margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
     }
     
     .modal-btn {
-      padding: 12px 25px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.2s ease;
+      padding: 10px 20px;
       border: none;
-      flex: 1;
-      max-width: 150px;
+      border-radius: 5px;
+      cursor: pointer;
     }
     
-    .open-btn {
+    .join-btn {
       background: #28a745;
       color: white;
     }
@@ -153,12 +110,6 @@
       background: #dc3545;
       color: white;
     }
-    
-    .telegram-logo {
-      width: 60px;
-      height: 60px;
-      margin-bottom: 20px;
-    }
   </style>
 </head>
 
@@ -166,89 +117,80 @@
 
 <div id="player"></div>
 
-<div id="miniAppOnlyMessage" class="mini-app-only">
+<!-- Show when opened in browser -->
+<div class="mini-app-only">
   <div class="mini-app-content">
-    <h1>🚀 Exclusive Mini App Content</h1>
-    <p>This streaming is only available within the Telegram Mini App. Open it in Telegram to enjoy uninterrupted live streaming.</p>
+    <h1>🔒 Exclusive Telegram Content</h1>
+    <p>This live stream is only available within the Telegram app.</p>
     <a href="https://t.me/lifegrambot/Live" class="telegram-btn">
       Open in Telegram
     </a>
   </div>
 </div>
 
+<!-- Join Channel Modal -->
 <div id="joinModal" class="join-modal">
-  <div class="modal-card">
-    <img src="https://telegram.org/img/t_logo.png" class="telegram-logo" alt="Telegram">
-    <h2>Join Our Telegram Channel</h2>
-    <p>Get access to exclusive content, updates, and more streaming links by joining our official Telegram channel.</p>
+  <div class="modal-content">
+    <h2>Join Our Channel</h2>
+    <p>For more streams and updates, join our Telegram channel</p>
     <div class="modal-buttons">
-      <button class="modal-btn cancel-btn" id="cancelJoin">Maybe Later</button>
-      <button class="modal-btn open-btn" id="openTelegram">Join Now</button>
+      <button id="cancelJoin" class="modal-btn cancel-btn">Later</button>
+      <button id="joinChannel" class="modal-btn join-btn">Join Now</button>
     </div>
   </div>
 </div>
 
 <script>
   // Detect Telegram Mini App
-  const isTelegramMiniApp = window.Telegram?.WebApp?.initData || 
-                          navigator.userAgent.includes("Telegram") || 
-                          window.navigator.userAgentData?.brands?.some(b => b.brand.includes('Telegram'));
+  const isTelegram = window.Telegram?.WebApp?.initData || 
+                   navigator.userAgent.includes("Telegram");
 
-  if (!isTelegramMiniApp) {
-    document.getElementById('player').style.display = 'none';
-    document.getElementById('miniAppOnlyMessage').style.display = 'flex';
-  } else {
-    const playerInstance = jwplayer("player").setup({
+  if (isTelegram) {
+    // Hide "only in Telegram" message
+    document.querySelector('.mini-app-only').style.display = 'none';
+    // Show player
+    document.getElementById('player').style.display = 'block';
+    
+    // Initialize player with autoplay and fullscreen
+    const player = jwplayer("player").setup({
       file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
       autostart: true,
       mute: false,
       controls: true,
-      repeat: true,
       width: "100%",
       height: "100%",
-      stretching: "uniform",
-      skin: { name: "netflix" }
+      stretching: "fill"
     });
-
-    // Join modal handling
-    const joinModal = document.getElementById('joinModal');
-    const openBtn = document.getElementById('openTelegram');
-    const cancelBtn = document.getElementById('cancelJoin');
-
-    openBtn.onclick = function() {
-      window.location.href = "https://t.me/neprosz";
-    };
-
-    cancelBtn.onclick = function() {
-      joinModal.style.display = 'none';
-    };
-
-    joinModal.addEventListener('click', (e) => {
-      if (e.target === joinModal) {
-        joinModal.style.display = 'none';
-      }
+    
+    // Enter fullscreen automatically
+    player.on('ready', function() {
+      setTimeout(() => {
+        try {
+          const container = player.getContainer();
+          if (container.requestFullscreen) {
+            container.requestFullscreen();
+          } else if (container.webkitRequestFullscreen) {
+            container.webkitRequestFullscreen();
+          }
+        } catch(e) {}
+      }, 1500);
     });
 
     // Background playback maintenance
-    let wasPlaying = true;
+    let isPlaying = false;
     let audioContext;
-
-    playerInstance.on('play', () => { wasPlaying = true; });
-    playerInstance.on('pause', () => { wasPlaying = false; });
-    playerInstance.on('idle', () => { wasPlaying = false; });
-
-    document.addEventListener("visibilitychange", () => {
-      if (!document.hidden && wasPlaying) {
-        setTimeout(() => {
-          playerInstance.play().catch(e => {
-            playerInstance.setMute(true);
-            playerInstance.play();
-          });
-        }, 300);
+    
+    player.on('play', () => { isPlaying = true; });
+    player.on('pause', () => { isPlaying = false; });
+    
+    document.addEventListener("visibilitychange", function() {
+      if (!document.hidden && isPlaying) {
+        setTimeout(() => player.play(), 300);
       }
     });
-
-    function initAudioContext() {
+    
+    // Audio context trick
+    function initAudio() {
       try {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioContext.createOscillator();
@@ -259,15 +201,22 @@
         gainNode.gain.value = 0.001;
       } catch(e) {}
     }
-
-    document.addEventListener('click', initAudioContext, { once: true });
-    document.addEventListener('touchstart', initAudioContext, { once: true });
-
-    setInterval(() => {
-      if (!document.hidden && wasPlaying && !playerInstance.getState().match(/play/)) {
-        playerInstance.play();
-      }
-    }, 5000);
+    
+    document.addEventListener('click', initAudio, { once: true });
+    
+    // Show join modal after 10 seconds
+    setTimeout(() => {
+      document.getElementById('joinModal').style.display = 'flex';
+    }, 10000);
+    
+    // Modal handlers
+    document.getElementById('joinChannel').onclick = function() {
+      window.location.href = "https://t.me/neprosz";
+    };
+    
+    document.getElementById('cancelJoin').onclick = function() {
+      document.getElementById('joinModal').style.display = 'none';
+    };
   }
 </script>
 
