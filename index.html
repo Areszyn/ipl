@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IPL 2024 Live Streaming | Exclusive on Telegram</title>
+  <title>Live Streaming | Exclusive on Telegram</title>
   <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -11,7 +11,6 @@
       --primary: #0088cc;
       --dark: #121212;
       --darker: #0a0a0a;
-      --accent: #FF5722;
       --text: #ffffff;
       --text-muted: rgba(255,255,255,0.7);
     }
@@ -25,7 +24,7 @@
     body {
       background: var(--darker);
       color: var(--text);
-      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       height: 100vh;
       overflow: hidden;
       position: relative;
@@ -42,21 +41,15 @@
       background: #000;
     }
 
-    #fallbackPlayer {
+    #html5Player {
       width: 100%;
       height: 100%;
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 1;
+      z-index: 2;
       display: none;
       background: #000;
-    }
-
-    #fallbackPlayer video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
     }
 
     .premium-overlay {
@@ -65,129 +58,64 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, rgba(18,18,18,0.9) 0%, rgba(10,10,10,0.95) 100%);
+      background: rgba(10,10,10,0.95);
       z-index: 1000;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      text-align: center;
       padding: 20px;
     }
 
     .premium-card {
-      background: linear-gradient(145deg, rgba(30,30,30,0.95) 0%, rgba(20,20,20,0.98) 100%);
+      background: rgba(30,30,30,0.95);
       border-radius: 16px;
-      padding: 40px 30px;
+      padding: 30px;
       width: 100%;
       max-width: 500px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.08);
-      animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    @keyframes scaleIn {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      text-align: center;
     }
 
     .logo {
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       border-radius: 50%;
       background: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 25px;
-    }
-
-    .logo i {
-      font-size: 36px;
-      color: white;
+      margin: 0 auto 20px;
     }
 
     h1 {
-      font-size: 28px;
+      font-size: 24px;
       margin-bottom: 15px;
-      font-weight: 700;
-      background: linear-gradient(to right, var(--primary), #00bcd4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--primary);
     }
 
     .tagline {
-      font-size: 16px;
-      color: var(--text-muted);
-      margin-bottom: 25px;
-      line-height: 1.6;
-    }
-
-    .features {
-      text-align: center;
-      display: inline-block;
-      margin: 25px 0;
-    }
-
-    .feature {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      margin-bottom: 15px;
       font-size: 15px;
-      text-align: left;
-    }
-
-    .feature i {
-      color: #4CAF50;
-      margin-right: 12px;
-      font-size: 18px;
-      width: 20px;
-      text-align: center;
-    }
-
-    .buttons-container {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-top: 25px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
     }
 
     .btn {
-      padding: 16px 32px;
+      padding: 14px 28px;
       border-radius: 50px;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      max-width: 300px;
-      display: inline-block;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
       border: none;
-      text-align: center;
+      margin: 10px;
+      display: inline-block;
     }
 
     .btn-primary {
-      background: linear-gradient(to right, var(--primary), #00bcd4);
+      background: var(--primary);
       color: white;
     }
 
-    .btn-secondary {
-      background: rgba(255,255,255,0.1);
-      color: var(--text);
-    }
-
-    .channel-requirement {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .mini-app-only {
+    .mini-app-message {
       position: fixed;
       top: 0;
       left: 0;
@@ -199,8 +127,8 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      text-align: center;
       padding: 20px;
+      text-align: center;
     }
 
     .error-message {
@@ -219,12 +147,21 @@
       text-align: center;
       padding: 20px;
     }
+
+    @media (max-width: 480px) {
+      .premium-card {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 22px;
+      }
+    }
   </style>
 </head>
 <body>
 
 <div id="player"></div>
-<div id="fallbackPlayer"></div>
+<div id="html5Player"></div>
 <div class="error-message" id="errorMessage"></div>
 
 <div class="premium-overlay" id="premiumOverlay">
@@ -232,147 +169,176 @@
     <div class="logo">
       <i class="fas fa-crown"></i>
     </div>
-    <h1>Unlock Premium Streaming</h1>
-    <p class="tagline">Join our Telegram channel to access exclusive live streams in HD quality</p>
-
-    <div class="features">
-      <div class="feature">
-        <i class="fas fa-check-circle"></i>
-        <span>Ad-free HD streaming</span>
-      </div>
-      <div class="feature">
-        <i class="fas fa-check-circle"></i>
-        <span>Live commentary</span>
-      </div>
-      <div class="feature">
-        <i class="fas fa-check-circle"></i>
-        <span>Real-time statistics</span>
-      </div>
-    </div>
-
-    <div class="buttons-container">
-      <button class="btn btn-primary" id="joinChannelBtn">
-        <i class="fab fa-telegram"></i> Join Channel
-      </button>
-      <button class="btn btn-secondary" id="joinLaterBtn">
-        Join Later
-      </button>
-    </div>
-
-    <div class="channel-requirement">
-      You must join our channel to continue watching
-    </div>
+    <h1>Premium Streaming</h1>
+    <p class="tagline">Join our channel for exclusive live streams</p>
+    <button class="btn btn-primary" id="joinBtn">
+      <i class="fab fa-telegram"></i> Join Channel
+    </button>
   </div>
 </div>
 
-<div class="mini-app-only" id="miniAppOnlyMessage">
+<div class="mini-app-message" id="miniAppMessage">
   <div class="premium-card">
     <div class="logo">
       <i class="fab fa-telegram"></i>
     </div>
-    <h1>Exclusive Mini App Content</h1>
-    <p class="tagline">This premium streaming is only available within the official Telegram Mini App</p>
+    <h1>Open in Telegram</h1>
+    <p class="tagline">This content is only available in the Telegram app</p>
     <a href="https://t.me/neprosz" class="btn btn-primary">
-      <i class="fab fa-telegram"></i> Open in Telegram
+      <i class="fab fa-telegram"></i> Open App
     </a>
   </div>
 </div>
 
 <script>
-  // Configuration with your real stream and channel
-  const CONFIG = {
+  // Configuration
+  const config = {
     streamUrl: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
-    telegramChannel: "https://t.me/neprosz"
+    channelUrl: "https://t.me/neprosz",
+    useHTML5Player: /iPhone|iPad|iPod/i.test(navigator.userAgent) // Use HTML5 for iOS
   };
 
-  // Initialize when DOM is ready
-  document.addEventListener('DOMContentLoaded', () => {
-    // First check if we're in Telegram
+  // Initialize
+  document.addEventListener('DOMContentLoaded', init);
+
+  function init() {
     if (!isTelegram()) {
-      document.getElementById('miniAppOnlyMessage').style.display = 'flex';
-      document.getElementById('premiumOverlay').style.display = 'none';
+      showMiniAppMessage();
       return;
     }
-    
-    // Initialize player (will show overlay by default)
-    initPlayer();
-    
-    // Set up button handlers
-    document.getElementById('joinChannelBtn').addEventListener('click', () => {
-      window.open(CONFIG.telegramChannel, '_blank');
-      localStorage.setItem('hasJoined', 'true');
-      hideOverlayAndPlay();
-    });
-    
-    document.getElementById('joinLaterBtn').addEventListener('click', () => {
-      localStorage.setItem('hasJoined', 'true');
-      hideOverlayAndPlay();
-    });
-    
-    // If already joined, play immediately
-    if (localStorage.getItem('hasJoined') === 'true') {
-      hideOverlayAndPlay();
-    }
-  });
 
-  function isTelegram() {
-    return (window.Telegram?.WebApp?.initData || 
-            navigator.userAgent.includes('Telegram'));
+    setupTelegramApp();
+    initPlayer();
+    setupButtons();
+    
+    if (hasJoinedBefore()) {
+      startPlayback();
+    }
   }
 
-  function hideOverlayAndPlay() {
-    document.getElementById('premiumOverlay').style.display = 'none';
+  function isTelegram() {
     try {
-      if (jwplayer().getState) {
-        jwplayer().play(true);
+      return (
+        window.Telegram?.WebApp?.initData || 
+        navigator.userAgent.includes('Telegram')
+      );
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function setupTelegramApp() {
+    try {
+      if (window.Telegram?.WebApp) {
+        Telegram.WebApp.expand();
+        Telegram.WebApp.enableClosingConfirmation();
+        Telegram.WebApp.BackButton.hide();
       }
     } catch (e) {
-      const video = document.querySelector('#fallbackPlayer video');
-      if (video) video.play().catch(console.error);
+      console.error("Telegram WebApp setup error:", e);
     }
   }
 
   function initPlayer() {
+    if (config.useHTML5Player) {
+      initHTML5Player();
+    } else {
+      initJWPlayer();
+    }
+  }
+
+  function initJWPlayer() {
     try {
       const player = jwplayer("player").setup({
-        file: CONFIG.streamUrl,
+        file: config.streamUrl,
         width: "100%",
         height: "100%",
         autostart: false
       });
-      
+
       player.on('ready', () => {
         document.getElementById('player').style.display = 'block';
       });
-      
-      player.on('error', (e) => {
-        console.error('JWPlayer error:', e);
-        setupFallbackPlayer();
+
+      player.on('error', () => {
+        fallbackToHTML5();
       });
-      
+
     } catch (e) {
-      console.error("JWPlayer init error:", e);
-      setupFallbackPlayer();
+      console.error("JWPlayer init failed:", e);
+      fallbackToHTML5();
     }
   }
 
-  function setupFallbackPlayer() {
-    const fallback = document.getElementById('fallbackPlayer');
-    fallback.innerHTML = `
-      <video controls autoplay playsinline style="width:100%;height:100%">
-        <source src="${CONFIG.streamUrl}" type="application/x-mpegURL">
+  function initHTML5Player() {
+    const playerEl = document.getElementById('html5Player');
+    playerEl.innerHTML = `
+      <video playsinline webkit-playsinline controls autoplay 
+             style="width:100%;height:100%;object-fit:contain">
+        <source src="${config.streamUrl}" type="application/x-mpegURL">
       </video>
     `;
-    fallback.style.display = 'block';
     
-    const video = fallback.querySelector('video');
+    const video = playerEl.querySelector('video');
     video.onerror = () => {
       showError("Stream unavailable. Please try again later.");
     };
     
     video.onplaying = () => {
-      document.getElementById('player').style.display = 'none';
+      playerEl.style.display = 'block';
     };
+  }
+
+  function fallbackToHTML5() {
+    console.log("Falling back to HTML5 player");
+    config.useHTML5Player = true;
+    document.getElementById('player').style.display = 'none';
+    initHTML5Player();
+  }
+
+  function setupButtons() {
+    document.getElementById('joinBtn').addEventListener('click', () => {
+      try {
+        Telegram.WebApp.openTelegramLink(config.channelUrl);
+      } catch (e) {
+        window.open(config.channelUrl, '_blank');
+      }
+      setJoinedStatus();
+      startPlayback();
+    });
+  }
+
+  function hasJoinedBefore() {
+    return localStorage.getItem('tgChannelJoined') === 'true';
+  }
+
+  function setJoinedStatus() {
+    localStorage.setItem('tgChannelJoined', 'true');
+  }
+
+  function startPlayback() {
+    document.getElementById('premiumOverlay').style.display = 'none';
+    
+    if (config.useHTML5Player) {
+      const video = document.querySelector('#html5Player video');
+      if (video) {
+        video.play().catch(e => {
+          console.error("Autoplay failed:", e);
+          video.controls = true;
+        });
+      }
+    } else {
+      try {
+        jwplayer().play(true);
+      } catch (e) {
+        fallbackToHTML5();
+      }
+    }
+  }
+
+  function showMiniAppMessage() {
+    document.getElementById('miniAppMessage').style.display = 'flex';
+    document.getElementById('premiumOverlay').style.display = 'none';
   }
 
   function showError(message) {
@@ -389,7 +355,6 @@
       </div>
     `;
     errorEl.style.display = 'flex';
-    document.getElementById('premiumOverlay').style.display = 'none';
   }
 </script>
 </body>
