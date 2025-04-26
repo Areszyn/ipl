@@ -20,6 +20,7 @@
       width: 100%;
       height: 100%;
       position: absolute;
+      display: none; /* Hidden by default until join modal is handled */
     }
     
     /* Mini App Only Message - More Attractive */
@@ -95,7 +96,6 @@
     
     /* Join Channel Modal - More Professional */
     .join-modal {
-      display: none;
       position: fixed;
       top: 0;
       left: 0;
@@ -107,6 +107,7 @@
       text-align: center;
       z-index: 1001;
       animation: fadeIn 0.3s ease-out;
+      display: flex; /* Show by default */
     }
     
     @keyframes fadeIn {
@@ -209,7 +210,7 @@
   </div>
 </div>
 
-<!-- Join Channel Modal -->
+<!-- Join Channel Modal - Now shown first -->
 <div id="joinModal" class="join-modal">
   <div class="modal-card">
     <img src="https://telegram.org/img/t_logo.png" class="telegram-logo" alt="Telegram">
@@ -233,10 +234,10 @@
     document.getElementById('player').style.display = 'none';
     document.getElementById('miniAppOnlyMessage').style.display = 'flex';
   } else {
-    // Inside Mini App: setup JWPlayer
+    // Initialize player but don't show it yet
     const playerInstance = jwplayer("player").setup({
       file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
-      autostart: true,
+      autostart: false, // Don't autostart until modal is handled
       mute: false,
       controls: true,
       repeat: true,
@@ -246,28 +247,44 @@
       skin: { name: "netflix" }
     });
 
-    // Show Join Telegram Modal after delay
+    // Get modal elements
     const joinModal = document.getElementById('joinModal');
-    setTimeout(() => {
-      joinModal.style.display = 'flex';
-      
-      // Close modal when clicking outside
-      joinModal.addEventListener('click', (e) => {
-        if (e.target === joinModal) {
-          joinModal.style.display = 'none';
-        }
-      });
-    }, 10000); // Show after 10 seconds
+    const openBtn = document.getElementById('openTelegram');
+    const cancelBtn = document.getElementById('cancelJoin');
 
-    // Open button click event
-    document.getElementById('openTelegram').onclick = function() {
+    // Close modal when clicking outside
+    joinModal.addEventListener('click', (e) => {
+      if (e.target === joinModal) {
+        handleCancel();
+      }
+    });
+
+    // Handle join now button
+    openBtn.onclick = function() {
       window.location.href = "https://t.me/neprosz";
+      // Start playback even if they don't actually join
+      startPlayback();
     };
 
-    // Cancel button click event
-    document.getElementById('cancelJoin').onclick = function() {
-      joinModal.style.display = 'none';
+    // Handle cancel button
+    cancelBtn.onclick = function() {
+      handleCancel();
     };
+
+    function handleCancel() {
+      joinModal.style.display = 'none';
+      startPlayback();
+    }
+
+    function startPlayback() {
+      document.getElementById('player').style.display = 'block';
+      playerInstance.play();
+      
+      // Optional: Show the modal again after 30 minutes
+      setTimeout(() => {
+        joinModal.style.display = 'flex';
+      }, 1800000); // 30 minutes
+    }
 
     // Handle visibility changes
     document.addEventListener("visibilitychange", function() {
