@@ -7,7 +7,6 @@
   <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Your full CSS (no changes) */
     :root {
       --primary: #0088cc;
       --dark: #121212;
@@ -16,13 +15,13 @@
       --text: #ffffff;
       --text-muted: rgba(255,255,255,0.7);
     }
-    
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       background: var(--darker);
       color: var(--text);
@@ -31,7 +30,7 @@
       overflow: hidden;
       position: relative;
     }
-    
+
     #player {
       width: 100%;
       height: 100%;
@@ -40,7 +39,7 @@
       left: 0;
       z-index: 1;
     }
-    
+
     /* Premium Overlay */
     .premium-overlay {
       position: fixed;
@@ -59,12 +58,12 @@
       opacity: 1;
       transition: opacity 0.5s ease;
     }
-    
+
     .premium-overlay.hidden {
       opacity: 0;
       pointer-events: none;
     }
-    
+
     .premium-card {
       background: linear-gradient(145deg, rgba(30,30,30,0.95) 0%, rgba(20,20,20,0.98) 100%);
       border-radius: 16px;
@@ -75,13 +74,14 @@
       border: 1px solid rgba(255,255,255,0.08);
       transform: scale(0.95);
       animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      text-align: center; /* MODIFIED: Ensure content inside card is centered */
     }
-    
+
     @keyframes scaleIn {
       from { transform: scale(0.95); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
-    
+
     .logo {
       width: 80px;
       height: 80px;
@@ -91,14 +91,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 25px;
+      margin: 0 auto 25px; /* Centers the logo */
     }
-    
+
     .logo i {
       font-size: 36px;
       color: white;
     }
-    
+
     h1 {
       font-size: 28px;
       margin-bottom: 15px;
@@ -107,85 +107,96 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    
+
     .tagline {
       font-size: 16px;
       color: var(--text-muted);
       margin-bottom: 25px;
       line-height: 1.6;
     }
-    
+
     .features {
-      text-align: left;
+      /* text-align: left; */ /* REMOVED/COMMENTED - Inherit center from card or set explicitly if needed */
+      text-align: center; /* Or keep left if preferred, but center looks better */
+      display: inline-block; /* Center the block itself */
       margin: 25px 0;
     }
-    
+
     .feature {
-      display: flex;
+      display: flex;         /* Use flex for alignment within each feature */
+      justify-content: flex-start; /* Align items to the start */
       align-items: center;
       margin-bottom: 15px;
       font-size: 15px;
+      text-align: left;      /* Keep text left-aligned within the feature */
     }
-    
+
     .feature i {
       color: var(--accent);
       margin-right: 12px;
       font-size: 18px;
+      width: 20px; /* Give icon fixed width for alignment */
+      text-align: center;
     }
-    
+
     .feature .checked {
       color: #4CAF50;
     }
-    
+
     .feature .unchecked {
       color: #f44336;
     }
-    
+
     .buttons-container {
       display: flex;
       gap: 15px;
-      justify-content: center;
+      justify-content: center; /* MODIFIED: Center buttons horizontally */
+      align-items: center;     /* MODIFIED: Align buttons vertically */
+      flex-wrap: wrap;       /* MODIFIED: Allow wrapping */
       margin-top: 25px;
     }
-    
+
     .btn {
       padding: 16px 32px;
       border-radius: 50px;
       font-size: 18px;
       font-weight: 600;
       cursor: pointer;
-      width: 100%;
-      max-width: 300px;
-      display: block;
+      /* width: 100%; */    /* REMOVED */
+      max-width: 300px;      /* Keep max-width */
+      /* display: block; */ /* REMOVED */
+      display: inline-block; /* MODIFIED: Use inline-block */
+      vertical-align: middle;/* MODIFIED: Align nicely if wrapped */
       box-shadow: 0 10px 20px rgba(0,0,0,0.2);
       transition: all 0.3s ease;
       border: none;
-      text-align: center;
+      text-align: center;    /* Keep text inside centered */
+      flex-shrink: 0;        /* MODIFIED: Prevent shrinking */
     }
-    
+
     .btn-primary {
       background: linear-gradient(to right, var(--primary), #00bcd4);
       color: white;
     }
-    
+
     .btn-secondary {
       background: rgba(255,255,255,0.1);
       color: var(--text);
     }
-    
+
     .btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 15px 30px rgba(0,0,0,0.3);
     }
-    
+
     .btn:active {
       transform: translateY(0);
     }
-    
+
     .telegram-icon {
       margin-right: 10px;
     }
-    
+
     .channel-requirement {
       margin-top: 30px;
       padding-top: 20px;
@@ -193,9 +204,9 @@
       font-size: 14px;
       color: var(--text-muted);
     }
-    
+
     .mini-app-only {
-      display: none;
+      display: none; /* Initially hidden, shown via JS */
       position: fixed;
       top: 0;
       left: 0;
@@ -203,34 +214,40 @@
       height: 100%;
       background: var(--darker);
       z-index: 2000;
+      display: flex; /* Use flex to center the card */
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      text-align: center;
+      text-align: center; /* Center text within this container */
       padding: 20px;
     }
-    
+
+    /* Mini-app card inherits .premium-card styles + text-align: center */
+
     @media (max-width: 480px) {
       .premium-card {
         padding: 30px 20px;
+        /* Inherits text-align: center */
       }
-      
+
       h1 {
         font-size: 24px;
       }
-      
+
       .tagline {
         font-size: 15px;
       }
-      
+
       .buttons-container {
-        flex-direction: column;
-        gap: 10px;
+        /* flex-direction: column; */ /* REMOVED: Keep row direction */
+        gap: 10px; /* Keep smaller gap */
+        /* Inherits justify-content, align-items, flex-wrap */
       }
-      
+
       .btn {
-        padding: 14px 24px;
-        font-size: 16px;
+        padding: 14px 24px; /* Keep smaller padding */
+        font-size: 16px;   /* Keep smaller font */
+        /* Inherits display: inline-block */
       }
     }
   </style>
@@ -247,7 +264,7 @@
     </div>
     <h1>Unlock Premium Streaming</h1>
     <p class="tagline">Join our Telegram channel to access exclusive IPL 2024 live streams in HD quality</p>
-    
+
     <div class="features">
       <div class="feature">
         <i class="fas fa-times unchecked"></i>
@@ -266,7 +283,7 @@
         <span>Exclusive behind-the-scenes content</span>
       </div>
     </div>
-    
+
     <div class="buttons-container">
       <button class="btn btn-primary" id="joinChannelBtn">
         <i class="fab fa-telegram telegram-icon"></i>
@@ -276,7 +293,7 @@
         Join Later
       </button>
     </div>
-    
+
     <div class="channel-requirement">
       You must join our channel to continue watching
     </div>
@@ -290,12 +307,12 @@
     </div>
     <h1>Exclusive Mini App Content</h1>
     <p class="tagline">This premium streaming is only available within the official Telegram Mini App</p>
-    
+
     <a href="https://t.me/lifegrambot/Live" class="btn btn-primary">
       <i class="fab fa-telegram telegram-icon"></i>
       Open in Telegram
     </a>
-    
+
     <div class="channel-requirement">
       Get the best streaming experience on Telegram
     </div>
@@ -304,63 +321,100 @@
 
 <script>
   function isTelegramMiniApp() {
-    if (window.Telegram?.WebApp?.initData) return true;
-    const userAgent = navigator.userAgent.toLowerCase();
-    if (userAgent.includes("telegram")) return true;
-    if (/iphone|ipad|ipod/.test(userAgent)) {
-      if (window.webkit?.messageHandlers || !window.navigator.standalone) {
-        return true;
-      }
-    }
-    return false;
+    // Consider adding more robust checks if necessary
+    return !!window.Telegram?.WebApp?.initData;
+    // Simpler check for testing:
+    // return true; // Force mini-app view for testing layout
+    // return false; // Force non-mini-app view for testing layout
   }
 
   function initPlayer() {
-    const player = jwplayer("player").setup({
-      file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
-      autostart: true,
-      width: "100%",
-      height: "100%",
-      controls: true
-    });
-    return player;
+    try {
+      const player = jwplayer("player").setup({
+        file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
+        autostart: false, // Start paused until overlay is dismissed
+        width: "100%",
+        height: "100%",
+        controls: true
+      });
+      return player;
+    } catch (e) {
+      console.error("JW Player initialization failed:", e);
+      // Optionally display an error message to the user on the page
+      document.getElementById('player').innerHTML = '<p style="color:red; padding:20px;">Video player could not be loaded.</p>';
+      return null; // Return null if player failed
+    }
   }
 
   function initApp() {
+    const miniAppOnlyMessage = document.getElementById('miniAppOnlyMessage');
+    const premiumOverlay = document.getElementById('premiumOverlay');
+    const playerContainer = document.getElementById('player');
+    let player = null; // Define player variable
+
     if (!isTelegramMiniApp()) {
-      document.getElementById('miniAppOnlyMessage').style.display = 'flex';
-      document.getElementById('player').style.display = 'none';
-      return;
+      // Not in Telegram Mini App - Show message and hide player/overlay
+      if (miniAppOnlyMessage) miniAppOnlyMessage.style.display = 'flex';
+      if (playerContainer) playerContainer.style.display = 'none';
+      if (premiumOverlay) premiumOverlay.style.display = 'none'; // Hide premium overlay too
+      return; // Stop initialization
     }
 
-    const player = initPlayer();
+    // --- Running inside Telegram Mini App ---
+
+    // Hide the Mini App Only message if it exists
+     if (miniAppOnlyMessage) miniAppOnlyMessage.style.display = 'none';
+
+    // Initialize the player
+    player = initPlayer();
+
+    // Ensure player exists before adding listeners or controls
+    if (!player) return; // Exit if player failed to initialize
+
+    // Keep player paused initially
     player.pause();
 
-    document.getElementById('joinChannelBtn').addEventListener('click', () => {
-      if (window.Telegram?.WebApp?.openTelegramLink) {
-        Telegram.WebApp.openTelegramLink('https://t.me/neprosz');
-      } else {
-        window.open('https://t.me/neprosz', '_blank');
-      }
-      localStorage.setItem('channelJoined', 'true');
-      document.getElementById('premiumOverlay').classList.add('hidden');
-      player.play();
-    });
+    const joinChannelBtn = document.getElementById('joinChannelBtn');
+    const joinLaterBtn = document.getElementById('joinLaterBtn');
 
-    document.getElementById('joinLaterBtn').addEventListener('click', () => {
-      localStorage.setItem('channelJoined', 'true');
-      document.getElementById('premiumOverlay').classList.add('hidden');
-      player.play();
-    });
+    if (joinChannelBtn) {
+      joinChannelBtn.addEventListener('click', () => {
+        // Attempt to open link via Telegram API, fall back to window.open
+        try {
+          window.Telegram?.WebApp?.openTelegramLink('https://t.me/neprosz');
+        } catch (e) {
+           console.warn("Telegram API link opening failed, using window.open:", e);
+           window.open('https://t.me/neprosz', '_blank');
+        }
+        localStorage.setItem('channelJoined', 'true');
+        if (premiumOverlay) premiumOverlay.classList.add('hidden');
+        player?.play(); // Play only if player exists
+      });
+    }
 
+    if (joinLaterBtn) {
+       joinLaterBtn.addEventListener('click', () => {
+        // Treat 'Join Later' as dismissing the overlay for the session
+        localStorage.setItem('channelJoined', 'true'); // Or use a different flag like 'overlayDismissed'
+        if (premiumOverlay) premiumOverlay.classList.add('hidden');
+        player?.play(); // Play only if player exists
+      });
+    }
+
+    // Check if overlay should be shown
     if (!localStorage.getItem('channelJoined')) {
-      document.getElementById('premiumOverlay').style.display = 'flex';
+      // Show overlay only if player exists and overlay exists
+       if (premiumOverlay && player) premiumOverlay.style.display = 'flex';
+       if (playerContainer) playerContainer.style.display = 'block'; // Ensure player container is visible
     } else {
-      document.getElementById('premiumOverlay').classList.add('hidden');
-      player.play();
+       // Already joined/dismissed - hide overlay and play video
+       if (premiumOverlay) premiumOverlay.classList.add('hidden');
+       if (playerContainer) playerContainer.style.display = 'block'; // Ensure player container is visible
+       player?.play(); // Play only if player exists
     }
   }
 
+  // Run initialization after the DOM is fully loaded
   document.addEventListener('DOMContentLoaded', initApp);
 </script>
 
