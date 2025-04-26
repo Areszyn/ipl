@@ -3,352 +3,178 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IPL 2024 Live Streaming | Exclusive on Telegram</title>
+  <title>IPL Live Stream</title>
   <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root {
-      --primary: #0088cc;
-      --dark: #121212;
-      --darker: #0a0a0a;
-      --accent: #FF5722;
-      --text: #ffffff;
-      --text-muted: rgba(255,255,255,0.7);
-    }
-    
-    * {
+    body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      background: var(--darker);
-      color: var(--text);
-      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-      height: 100vh;
-      overflow: hidden;
-      position: relative;
+      background: #000;
+      font-family: Arial, sans-serif;
+      color: white;
     }
     
     #player {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
+      width: 100vw;
+      height: 100vh;
     }
     
-    /* Premium Overlay */
-    .premium-overlay {
+    .overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, rgba(18,18,18,0.9) 0%, rgba(10,10,10,0.95) 100%);
-      z-index: 1000;
+      background: rgba(0,0,0,0.9);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
       padding: 20px;
-      opacity: 1;
-      transition: opacity 0.5s ease;
+      z-index: 100;
     }
     
-    .premium-overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    
-    .premium-card {
-      background: linear-gradient(145deg, rgba(30,30,30,0.95) 0%, rgba(20,20,20,0.98) 100%);
-      border-radius: 16px;
-      padding: 40px 30px;
-      width: 100%;
+    .message-box {
+      background: #222;
+      padding: 30px;
+      border-radius: 10px;
       max-width: 500px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.08);
-      transform: scale(0.95);
-      animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
-    
-    @keyframes scaleIn {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    
-    .logo {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 20px;
-      border-radius: 50%;
-      background: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 25px;
-    }
-    
-    .logo i {
-      font-size: 36px;
-      color: white;
+      width: 90%;
     }
     
     h1 {
-      font-size: 28px;
+      font-size: 24px;
       margin-bottom: 15px;
-      font-weight: 700;
-      background: linear-gradient(to right, var(--primary), #00bcd4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    .tagline {
-      font-size: 16px;
-      color: var(--text-muted);
-      margin-bottom: 25px;
-      line-height: 1.6;
+      color: #0088cc;
     }
     
     .features {
       text-align: left;
-      margin: 25px 0;
+      margin: 20px 0;
     }
     
     .feature {
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      margin-bottom: 15px;
-      font-size: 15px;
     }
     
     .feature i {
-      color: var(--accent);
-      margin-right: 12px;
-      font-size: 18px;
+      margin-right: 10px;
+      color: #4CAF50;
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      flex: 1;
     }
     
     .join-btn {
-      background: linear-gradient(to right, var(--primary), #00bcd4);
+      background: #0088cc;
       color: white;
-      border: none;
-      padding: 16px 32px;
-      border-radius: 50px;
-      font-size: 18px;
-      font-weight: 600;
-      cursor: pointer;
+    }
+    
+    .later-btn {
+      background: #333;
+      color: white;
+    }
+    
+    .note {
       margin-top: 20px;
-      width: 100%;
-      max-width: 300px;
-      display: block;
-      margin: 25px auto 0;
-      box-shadow: 0 10px 20px rgba(0,136,204,0.3);
-      transition: all 0.3s ease;
-    }
-    
-    .join-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 30px rgba(0,136,204,0.4);
-    }
-    
-    .join-btn:active {
-      transform: translateY(0);
-    }
-    
-    .telegram-icon {
-      margin-right: 10px;
-    }
-    
-    /* Channel Join Requirement */
-    .channel-requirement {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255,255,255,0.1);
       font-size: 14px;
-      color: var(--text-muted);
-    }
-    
-    /* Mini App Only Message */
-    .mini-app-only {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--darker);
-      z-index: 2000;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-    }
-    
-    /* Responsive Adjustments */
-    @media (max-width: 480px) {
-      .premium-card {
-        padding: 30px 20px;
-      }
-      
-      h1 {
-        font-size: 24px;
-      }
-      
-      .tagline {
-        font-size: 15px;
-      }
+      color: #aaa;
     }
   </style>
 </head>
 
 <body>
-
 <div id="player"></div>
 
-<!-- Premium Overlay (Forced Channel Join) -->
-<div class="premium-overlay" id="premiumOverlay">
-  <div class="premium-card">
-    <div class="logo">
-      <i class="fas fa-crown"></i>
-    </div>
-    <h1>Unlock Premium Streaming</h1>
-    <p class="tagline">Join our Telegram channel to access exclusive IPL 2024 live streams in HD quality</p>
+<div class="overlay" id="joinOverlay">
+  <div class="message-box">
+    <h1>Join Our Channel to Watch</h1>
+    <p>Access live IPL streaming by joining our Telegram channel</p>
     
     <div class="features">
       <div class="feature">
-        <i class="fas fa-check-circle"></i>
-        <span>Ad-free HD streaming</span>
+        <i class="fas fa-check"></i>
+        <span>HD Quality Stream</span>
       </div>
       <div class="feature">
-        <i class="fas fa-check-circle"></i>
-        <span>Live commentary in multiple languages</span>
+        <i class="fas fa-check"></i>
+        <span>Live Match Updates</span>
       </div>
       <div class="feature">
-        <i class="fas fa-check-circle"></i>
-        <span>Real-time match statistics</span>
-      </div>
-      <div class="feature">
-        <i class="fas fa-check-circle"></i>
-        <span>Exclusive behind-the-scenes content</span>
+        <i class="fas fa-check"></i>
+        <span>Instant Notifications</span>
       </div>
     </div>
     
-    <button class="join-btn" id="joinChannelBtn">
-      <i class="fab fa-telegram telegram-icon"></i>
-      Join @neprosz Channel
-    </button>
-    
-    <div class="channel-requirement">
-      You must join our channel to continue watching
+    <div class="buttons">
+      <button class="join-btn" id="joinBtn">Join Channel</button>
+      <button class="later-btn" id="laterBtn">Join Later</button>
     </div>
-  </div>
-</div>
-
-<!-- Mini App Only Message -->
-<div class="mini-app-only" id="miniAppOnlyMessage">
-  <div class="premium-card">
-    <div class="logo">
-      <i class="fab fa-telegram"></i>
-    </div>
-    <h1>Exclusive Mini App Content</h1>
-    <p class="tagline">This premium streaming is only available within the official Telegram Mini App</p>
     
-    <a href="https://t.me/lifegrambot/Live" class="join-btn">
-      <i class="fab fa-telegram telegram-icon"></i>
-      Open in Telegram
-    </a>
-    
-    <div class="channel-requirement">
-      Get the best streaming experience on Telegram
-    </div>
+    <p class="note">You must join to continue watching</p>
   </div>
 </div>
 
 <script>
-  // Enhanced Telegram Mini App detection
-  function isTelegramMiniApp() {
-    // Check for Telegram WebApp SDK
-    if (window.Telegram?.WebApp?.initData) return true;
-    
-    // Check user agent
-    const userAgent = navigator.userAgent.toLowerCase();
-    if (userAgent.includes("telegram")) return true;
-    
-    // iOS WebView detection
-    if (/iphone|ipad|ipod/.test(userAgent)) {
-      if (window.webkit?.messageHandlers || !window.navigator.standalone) {
-        return true;
-      }
-    }
-    
-    return false;
-  }
-
-  // Initialize player
-  function initPlayer() {
-    const player = jwplayer("player").setup({
-      file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
-      autostart: true,
-      width: "100%",
-      height: "100%",
-      controls: true
-    });
-    
-    // Hide overlay when playback starts
-    player.on('play', () => {
-      // Only hide if user has joined channel
-      if (localStorage.getItem('channelJoined')) {
-        document.getElementById('premiumOverlay').classList.add('hidden');
-      }
-    });
-    
-    return player;
+  // Check if in Telegram Mini App
+  function isTelegramApp() {
+    return window.Telegram?.WebApp?.initData || 
+           navigator.userAgent.includes("Telegram");
   }
 
   // Initialize the app
-  function initApp() {
-    if (!isTelegramMiniApp()) {
-      // Show mini app only message if not in Telegram
-      document.getElementById('miniAppOnlyMessage').style.display = 'flex';
-      document.getElementById('player').style.display = 'none';
+  function init() {
+    if (!isTelegramApp()) {
+      alert("Please open in Telegram to watch");
       return;
     }
     
-    // In Telegram Mini App - proceed with initialization
-    const player = initPlayer();
-    
-    // Force channel join before allowing playback
-    document.getElementById('joinChannelBtn').addEventListener('click', () => {
-      // Open channel in Telegram
-      Telegram.WebApp.openTelegramLink('https://t.me/neprosz');
-      
-      // Mark as joined (in a real app you would verify this properly)
-      localStorage.setItem('channelJoined', 'true');
-      
-      // Hide the overlay after short delay
-      setTimeout(() => {
-        document.getElementById('premiumOverlay').classList.add('hidden');
-        player.play();
-      }, 1500);
+    const player = jwplayer("player").setup({
+      file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
+      width: "100%",
+      height: "100%",
+      autostart: false
     });
     
-    // Check if already joined channel
-    if (!localStorage.getItem('channelJoined')) {
-      // Show the join requirement overlay
-      document.getElementById('premiumOverlay').style.display = 'flex';
-      
-      // Pause player until user joins
-      player.pause();
+    // Join Channel button
+    document.getElementById("joinBtn").addEventListener("click", () => {
+      Telegram.WebApp.openTelegramLink("https://t.me/neprosz");
+      localStorage.setItem("hasJoined", "true");
+      document.getElementById("joinOverlay").style.display = "none";
+      player.play();
+    });
+    
+    // Join Later button
+    document.getElementById("laterBtn").addEventListener("click", () => {
+      alert("You'll need to join for full access. Playing for now...");
+      document.getElementById("joinOverlay").style.display = "none";
+      player.play();
+    });
+    
+    // Check if already joined
+    if (localStorage.getItem("hasJoined")) {
+      document.getElementById("joinOverlay").style.display = "none";
+      player.play();
     }
   }
 
-  // Start initialization when DOM is loaded
-  document.addEventListener('DOMContentLoaded', initApp);
+  // Start when page loads
+  window.addEventListener("DOMContentLoaded", init);
 </script>
 
 </body>
