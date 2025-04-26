@@ -20,10 +20,8 @@
       width: 100%;
       height: 100%;
       position: absolute;
-      display: none; /* Hidden by default until join modal is handled */
     }
     
-    /* Mini App Only Message - More Attractive */
     .mini-app-only {
       display: none;
       position: fixed;
@@ -77,24 +75,6 @@
       margin-top: 15px;
     }
     
-    .telegram-btn:hover {
-      background: #0077b3;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-    }
-    
-    .telegram-btn:active {
-      transform: translateY(0);
-    }
-    
-    .telegram-icon {
-      vertical-align: middle;
-      margin-right: 10px;
-      width: 24px;
-      height: 24px;
-    }
-    
-    /* Join Channel Modal - More Professional */
     .join-modal {
       position: fixed;
       top: 0;
@@ -107,7 +87,7 @@
       text-align: center;
       z-index: 1001;
       animation: fadeIn 0.3s ease-out;
-      display: flex; /* Show by default */
+      display: flex;
     }
     
     @keyframes fadeIn {
@@ -169,19 +149,9 @@
       color: white;
     }
     
-    .open-btn:hover {
-      background: #218838;
-      transform: translateY(-2px);
-    }
-    
     .cancel-btn {
       background: #dc3545;
       color: white;
-    }
-    
-    .cancel-btn:hover {
-      background: #c82333;
-      transform: translateY(-2px);
     }
     
     .telegram-logo {
@@ -196,21 +166,16 @@
 
 <div id="player"></div>
 
-<!-- Mini App Only Message -->
 <div id="miniAppOnlyMessage" class="mini-app-only">
   <div class="mini-app-content">
     <h1>🚀 Exclusive Mini App Content</h1>
     <p>This streaming is only available within the Telegram Mini App. Open it in Telegram to enjoy uninterrupted live streaming.</p>
     <a href="https://t.me/lifegrambot/Live" class="telegram-btn">
-      <svg class="telegram-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
-      </svg>
       Open in Telegram
     </a>
   </div>
 </div>
 
-<!-- Join Channel Modal - Now shown first -->
 <div id="joinModal" class="join-modal">
   <div class="modal-card">
     <img src="https://telegram.org/img/t_logo.png" class="telegram-logo" alt="Telegram">
@@ -224,20 +189,18 @@
 </div>
 
 <script>
-  // Enhanced Telegram Mini App detection
+  // Detect Telegram Mini App
   const isTelegramMiniApp = window.Telegram?.WebApp?.initData || 
                           navigator.userAgent.includes("Telegram") || 
                           window.navigator.userAgentData?.brands?.some(b => b.brand.includes('Telegram'));
 
   if (!isTelegramMiniApp) {
-    // If NOT inside mini app, show attractive message
     document.getElementById('player').style.display = 'none';
     document.getElementById('miniAppOnlyMessage').style.display = 'flex';
   } else {
-    // Initialize player but don't show it yet
     const playerInstance = jwplayer("player").setup({
       file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
-      autostart: false, // Don't autostart until modal is handled
+      autostart: true,
       mute: false,
       controls: true,
       repeat: true,
@@ -247,51 +210,64 @@
       skin: { name: "netflix" }
     });
 
-    // Get modal elements
+    // Join modal handling
     const joinModal = document.getElementById('joinModal');
     const openBtn = document.getElementById('openTelegram');
     const cancelBtn = document.getElementById('cancelJoin');
 
-    // Close modal when clicking outside
-    joinModal.addEventListener('click', (e) => {
-      if (e.target === joinModal) {
-        handleCancel();
-      }
-    });
-
-    // Handle join now button
     openBtn.onclick = function() {
       window.location.href = "https://t.me/neprosz";
-      // Start playback even if they don't actually join
-      startPlayback();
     };
 
-    // Handle cancel button
     cancelBtn.onclick = function() {
-      handleCancel();
+      joinModal.style.display = 'none';
     };
 
-    function handleCancel() {
-      joinModal.style.display = 'none';
-      startPlayback();
-    }
-
-    function startPlayback() {
-      document.getElementById('player').style.display = 'block';
-      playerInstance.play();
-      
-      // Optional: Show the modal again after 30 minutes
-      setTimeout(() => {
-        joinModal.style.display = 'flex';
-      }, 1800000); // 30 minutes
-    }
-
-    // Handle visibility changes
-    document.addEventListener("visibilitychange", function() {
-      if (!document.hidden && playerInstance.getState() === 'paused') {
-        setTimeout(() => playerInstance.play(), 300);
+    joinModal.addEventListener('click', (e) => {
+      if (e.target === joinModal) {
+        joinModal.style.display = 'none';
       }
     });
+
+    // Background playback maintenance
+    let wasPlaying = true;
+    let audioContext;
+
+    playerInstance.on('play', () => { wasPlaying = true; });
+    playerInstance.on('pause', () => { wasPlaying = false; });
+    playerInstance.on('idle', () => { wasPlaying = false; });
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && wasPlaying) {
+        setTimeout(() => {
+          playerInstance.play().catch(e => {
+            playerInstance.setMute(true);
+            playerInstance.play();
+          });
+        }, 300);
+      }
+    });
+
+    function initAudioContext() {
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        oscillator.start();
+        gainNode.gain.value = 0.001;
+      } catch(e) {}
+    }
+
+    document.addEventListener('click', initAudioContext, { once: true });
+    document.addEventListener('touchstart', initAudioContext, { once: true });
+
+    setInterval(() => {
+      if (!document.hidden && wasPlaying && !playerInstance.getState().match(/play/)) {
+        playerInstance.play();
+      }
+    }, 5000);
   }
 </script>
 
