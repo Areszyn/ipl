@@ -5,17 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Live IPL Streaming</title>
   <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root {
-      --primary-color: #0088cc;
-      --secondary-color: #121212;
-      --accent-color: #28a745;
-      --danger-color: #dc3545;
-      --text-color: #ffffff;
-      --text-muted: #aaaaaa;
-    }
-    
     html, body {
       margin: 0;
       padding: 0;
@@ -24,107 +14,12 @@
       height: 100%;
       width: 100%;
       font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      color: var(--text-color);
     }
     
     #player {
       width: 100%;
       height: 100%;
       position: absolute;
-    }
-    
-    /* Control Bar Overlay */
-    .control-overlay {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    
-    .control-overlay.visible {
-      opacity: 1;
-    }
-    
-    .control-btn {
-      background: rgba(255,255,255,0.2);
-      border: none;
-      color: white;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .control-btn:hover {
-      background: rgba(255,255,255,0.3);
-      transform: scale(1.1);
-    }
-    
-    .control-btn i {
-      font-size: 18px;
-    }
-    
-    /* Quality Selector */
-    .quality-selector {
-      position: absolute;
-      bottom: 70px;
-      right: 15px;
-      background: rgba(0,0,0,0.8);
-      border-radius: 8px;
-      padding: 10px;
-      display: none;
-      z-index: 101;
-    }
-    
-    .quality-option {
-      padding: 8px 15px;
-      color: var(--text-color);
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    
-    .quality-option:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    
-    .quality-option.active {
-      color: var(--accent-color);
-      font-weight: bold;
-    }
-    
-    /* Loading Spinner */
-    .loading-spinner {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 999;
-      display: none;
-    }
-    
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: var(--primary-color);
-      animation: spin 1s ease-in-out infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
     }
     
     /* Mini App Only Message */
@@ -144,62 +39,35 @@
       align-items: center;
     }
     
-    /* (Previous styles for mini-app-only and modal remain the same) */
-    /* ... */
-    
-    /* Picture-in-Picture Toggle */
-    .pip-toggle {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      z-index: 100;
-      display: none;
+    .mini-app-content {
+      max-width: 90%;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }
     
-    /* Fullscreen Toggle */
-    .fullscreen-toggle {
-      position: absolute;
-      top: 15px;
-      right: 60px;
-      z-index: 100;
-      display: none;
+    .mini-app-only h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #fff;
     }
     
-    /* Error Message */
-    .error-message {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.8);
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
-      z-index: 999;
-      display: none;
+    .mini-app-only p {
+      font-size: 18px;
+      margin-bottom: 30px;
+      line-height: 1.6;
     }
     
-    .error-message button {
-      margin-top: 15px;
-      background: var(--primary-color);
+    .telegram-btn {
+      display: inline-block;
+      background: #0088cc;
       color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    /* Stats Overlay */
-    .stats-overlay {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(0,0,0,0.7);
-      padding: 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      z-index: 100;
-      display: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 18px;
     }
   </style>
 </head>
@@ -208,64 +76,32 @@
 
 <div id="player"></div>
 
-<!-- Custom Controls -->
-<div class="control-overlay">
-  <button class="control-btn" id="playPauseBtn"><i class="fas fa-pause"></i></button>
-  <div class="time-display">
-    <span id="currentTime">00:00</span> / <span id="duration">00:00</span>
+<!-- Mini App Only Message -->
+<div id="miniAppOnlyMessage" class="mini-app-only">
+  <div class="mini-app-content">
+    <h1>Exclusive Mini App Content</h1>
+    <p>This streaming is only available within the Telegram Mini App. Please open it in Telegram to watch.</p>
+    <a href="https://t.me/lifegrambot/Live" class="telegram-btn">
+      Open in Telegram
+    </a>
   </div>
-  <button class="control-btn" id="fullscreenBtn"><i class="fas fa-expand"></i></button>
-  <button class="control-btn" id="qualityBtn"><i class="fas fa-cog"></i></button>
-  <button class="control-btn" id="pipBtn"><i class="fas fa-clone"></i></button>
 </div>
-
-<div class="quality-selector" id="qualitySelector">
-  <div class="quality-option" data-quality="auto">Auto</div>
-  <div class="quality-option" data-quality="720p">720p</div>
-  <div class="quality-option" data-quality="480p">480p</div>
-  <div class="quality-option" data-quality="360p">360p</div>
-</div>
-
-<!-- Loading Spinner -->
-<div class="loading-spinner" id="loadingSpinner">
-  <div class="spinner"></div>
-  <p>Loading stream...</p>
-</div>
-
-<!-- Error Message -->
-<div class="error-message" id="errorMessage">
-  <h3>Stream Error</h3>
-  <p id="errorText">Unable to load the stream. Please try again.</p>
-  <button id="retryBtn">Retry</button>
-</div>
-
-<!-- Stats Overlay -->
-<div class="stats-overlay" id="statsOverlay">
-  <div>Bitrate: <span id="bitrate">0</span> kbps</div>
-  <div>Resolution: <span id="resolution">0x0</span></div>
-  <div>FPS: <span id="fps">0</span></div>
-</div>
-
-<!-- (Previous HTML for mini-app-only and modal remains the same) -->
-<!-- ... -->
 
 <script>
-  // Enhanced Telegram Mini App detection with iOS support
+  // Telegram Mini App detection
   function isTelegramMiniApp() {
+    // Check for Telegram WebApp SDK
     if (window.Telegram?.WebApp?.initData) return true;
     
+    // Check user agent
     const userAgent = navigator.userAgent.toLowerCase();
-    const isIOS = /iphone|ipad|ipod/.test(userAgent);
-    
-    if (isIOS && (window.webkit?.messageHandlers || !window.navigator.standalone)) {
-      return true;
-    }
-    
     if (userAgent.includes("telegram")) return true;
     
-    if (window.navigator.userAgentData?.brands?.some(b => 
-        b.brand.toLowerCase().includes('telegram'))) {
-      return true;
+    // Check for iOS WebView
+    if (/iphone|ipad|ipod/.test(userAgent)) {
+      if (window.webkit?.messageHandlers || !window.navigator.standalone) {
+        return true;
+      }
     }
     
     return false;
@@ -274,261 +110,21 @@
   // Initialize the app
   function initApp() {
     if (isTelegramMiniApp()) {
-      initializePlayer();
-    } else {
-      setTimeout(() => {
-        if (!isTelegramMiniApp()) {
-          document.getElementById('player').style.display = 'none';
-          document.getElementById('miniAppOnlyMessage').style.display = 'flex';
-        } else {
-          initializePlayer();
-        }
-      }, 500);
-    }
-  }
-
-  let playerInstance;
-  let isFullscreen = false;
-  let isPIP = false;
-  let qualityLevels = [];
-  let currentQuality = 'auto';
-
-  function initializePlayer() {
-    showLoadingSpinner();
-    
-    playerInstance = jwplayer("player").setup({
-      file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
-      autostart: true,
-      mute: false,
-      controls: false, // We're using custom controls
-      repeat: true,
-      width: "100%",
-      height: "100%",
-      stretching: "uniform",
-      skin: { name: "netflix" }
-    });
-
-    // Player event listeners
-    playerInstance.on('ready', onPlayerReady);
-    playerInstance.on('play', onPlayerPlay);
-    playerInstance.on('pause', onPlayerPause);
-    playerInstance.on('complete', onPlayerComplete);
-    playerInstance.on('error', onPlayerError);
-    playerInstance.on('time', updateTimeDisplay);
-    playerInstance.on('levels', onQualityLevelsLoaded);
-    playerInstance.on('levelsChanged', onQualityChanged);
-    playerInstance.on('bufferChange', updateStats);
-    playerInstance.on('meta', updateStats);
-    
-    // Setup custom controls
-    setupControls();
-    
-    // Show Join Telegram Modal after delay
-    setTimeout(showJoinModal, 10000);
-  }
-
-  function onPlayerReady() {
-    hideLoadingSpinner();
-    console.log("Player is ready");
-    
-    // Show custom controls
-    document.querySelector('.control-overlay').classList.add('visible');
-    
-    // Show PiP button if supported
-    if (document.pictureInPictureEnabled) {
-      document.getElementById('pipBtn').style.display = 'block';
-    }
-    
-    // Show fullscreen button
-    document.getElementById('fullscreenBtn').style.display = 'block';
-    
-    // Show stats overlay for debugging (remove in production)
-    document.getElementById('statsOverlay').style.display = 'block';
-  }
-
-  function onPlayerPlay() {
-    document.getElementById('playPauseBtn').innerHTML = '<i class="fas fa-pause"></i>';
-  }
-
-  function onPlayerPause() {
-    document.getElementById('playPauseBtn').innerHTML = '<i class="fas fa-play"></i>';
-  }
-
-  function onPlayerComplete() {
-    console.log("Playback completed");
-  }
-
-  function onPlayerError(error) {
-    hideLoadingSpinner();
-    console.error("Player error:", error);
-    
-    document.getElementById('errorText').textContent = 
-      `Error ${error.code}: ${error.message || 'Unable to load stream'}`;
-    document.getElementById('errorMessage').style.display = 'block';
-  }
-
-  function updateTimeDisplay(event) {
-    const current = formatTime(event.position);
-    const duration = formatTime(event.duration);
-    document.getElementById('currentTime').textContent = current;
-    document.getElementById('duration').textContent = duration;
-  }
-
-  function formatTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  }
-
-  function onQualityLevelsLoaded(event) {
-    qualityLevels = event.levels;
-    console.log("Quality levels loaded:", qualityLevels);
-  }
-
-  function onQualityChanged(event) {
-    currentQuality = qualityLevels[event.currentLevel]?.label || 'auto';
-    console.log("Quality changed to:", currentQuality);
-  }
-
-  function updateStats() {
-    const stats = playerInstance.getQualityLevels();
-    const currentLevel = playerInstance.getCurrentQuality();
-    
-    if (stats && stats[currentLevel]) {
-      document.getElementById('bitrate').textContent = 
-        Math.round(stats[currentLevel].bitrate / 1000);
-      document.getElementById('resolution').textContent = 
-        `${stats[currentLevel].width}x${stats[currentLevel].height}`;
-      document.getElementById('fps').textContent = 
-        stats[currentLevel].framerate || 'N/A';
-    }
-  }
-
-  function setupControls() {
-    // Play/Pause
-    document.getElementById('playPauseBtn').addEventListener('click', () => {
-      if (playerInstance.getState() === 'playing') {
-        playerInstance.pause();
-      } else {
-        playerInstance.play();
-      }
-    });
-    
-    // Fullscreen
-    document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
-    
-    // Quality Selector
-    document.getElementById('qualityBtn').addEventListener('click', () => {
-      const selector = document.getElementById('qualitySelector');
-      selector.style.display = selector.style.display === 'block' ? 'none' : 'block';
-    });
-    
-    // Quality Options
-    document.querySelectorAll('.quality-option').forEach(option => {
-      option.addEventListener('click', () => {
-        if (option.dataset.quality === 'auto') {
-          playerInstance.setCurrentQuality(-1);
-        } else {
-          const level = qualityLevels.findIndex(level => 
-            level.label === option.dataset.quality);
-          if (level !== -1) playerInstance.setCurrentQuality(level);
-        }
-        
-        document.querySelectorAll('.quality-option').forEach(opt => 
-          opt.classList.remove('active'));
-        option.classList.add('active');
-        document.getElementById('qualitySelector').style.display = 'none';
+      // Inside Telegram - setup player
+      jwplayer("player").setup({
+        file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
+        autostart: true,
+        width: "100%",
+        height: "100%"
       });
-    });
-    
-    // Picture-in-Picture
-    document.getElementById('pipBtn').addEventListener('click', togglePictureInPicture);
-    
-    // Retry Button
-    document.getElementById('retryBtn').addEventListener('click', () => {
-      document.getElementById('errorMessage').style.display = 'none';
-      playerInstance.load([{ file: playerInstance.getPlaylistItem().file }]);
-      playerInstance.play();
-    });
-    
-    // Control overlay visibility
-    let controlsTimeout;
-    document.addEventListener('mousemove', () => {
-      document.querySelector('.control-overlay').classList.add('visible');
-      clearTimeout(controlsTimeout);
-      controlsTimeout = setTimeout(() => {
-        document.querySelector('.control-overlay').classList.remove('visible');
-      }, 3000);
-    });
-  }
-
-  function toggleFullscreen() {
-    if (!isFullscreen) {
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen();
-      } else if (document.documentElement.webkitRequestFullscreen) {
-        document.documentElement.webkitRequestFullscreen();
-      }
-      isFullscreen = true;
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      }
-      isFullscreen = false;
+      // Outside Telegram - show message
+      document.getElementById('player').style.display = 'none';
+      document.getElementById('miniAppOnlyMessage').style.display = 'flex';
     }
   }
 
-  async function togglePictureInPicture() {
-    try {
-      if (!isPIP) {
-        await document.getElementById('player').requestPictureInPicture();
-        isPIP = true;
-      } else {
-        await document.exitPictureInPicture();
-        isPIP = false;
-      }
-    } catch (error) {
-      console.error("PiP error:", error);
-    }
-  }
-
-  function showLoadingSpinner() {
-    document.getElementById('loadingSpinner').style.display = 'block';
-  }
-
-  function hideLoadingSpinner() {
-    document.getElementById('loadingSpinner').style.display = 'none';
-  }
-
-  function showJoinModal() {
-    const joinModal = document.getElementById('joinModal');
-    joinModal.style.display = 'flex';
-    
-    joinModal.addEventListener('click', (e) => {
-      if (e.target === joinModal) {
-        joinModal.style.display = 'none';
-      }
-    });
-    
-    document.getElementById('openTelegram').onclick = function() {
-      window.location.href = "https://t.me/neprosz";
-    };
-    
-    document.getElementById('cancelJoin').onclick = function() {
-      joinModal.style.display = 'none';
-    };
-  }
-
-  // Handle visibility changes
-  document.addEventListener("visibilitychange", function() {
-    if (!document.hidden && playerInstance && playerInstance.getState() === 'paused') {
-      setTimeout(() => playerInstance.play(), 300);
-    }
-  });
-
-  // Start initialization
+  // Start when DOM is loaded
   document.addEventListener('DOMContentLoaded', initApp);
 </script>
 
