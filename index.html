@@ -31,32 +31,15 @@
       position: relative;
     }
 
-    #player {
+    #player, #fallbackPlayer {
       width: 100%;
       height: 100%;
       position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
-      display: none;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       background: #000;
-    }
-
-    #fallbackPlayer {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
       display: none;
-      background: #000;
-    }
-
-    #fallbackPlayer video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
     }
 
     .premium-overlay {
@@ -287,6 +270,9 @@
 
   // Initialize when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
+    // Show premium overlay by default
+    document.getElementById('premiumOverlay').style.display = 'flex';
+    
     // First check if we're in Telegram
     if (!isTelegram()) {
       document.getElementById('miniAppOnlyMessage').style.display = 'flex';
@@ -360,37 +346,12 @@
     const fallback = document.getElementById('fallbackPlayer');
     fallback.innerHTML = `
       <video controls autoplay playsinline style="width:100%;height:100%">
-        <source src="${CONFIG.streamUrl}" type="application/x-mpegURL">
+        <source src="${CONFIG.streamUrl}" type="video/mp4">
       </video>
     `;
     fallback.style.display = 'block';
-    
-    const video = fallback.querySelector('video');
-    video.onerror = () => {
-      showError("Stream unavailable. Please try again later.");
-    };
-    
-    video.onplaying = () => {
-      document.getElementById('player').style.display = 'none';
-    };
-  }
-
-  function showError(message) {
-    const errorEl = document.getElementById('errorMessage');
-    errorEl.innerHTML = `
-      <div class="premium-card">
-        <div class="logo">
-          <i class="fas fa-exclamation-triangle"></i>
-        </div>
-        <h1>${message}</h1>
-        <button class="btn btn-primary" onclick="window.location.reload()">
-          <i class="fas fa-sync-alt"></i> Reload
-        </button>
-      </div>
-    `;
-    errorEl.style.display = 'flex';
-    document.getElementById('premiumOverlay').style.display = 'none';
   }
 </script>
+
 </body>
 </html>
