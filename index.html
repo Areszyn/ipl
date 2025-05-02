@@ -324,7 +324,10 @@
         file: CONFIG.streamUrl,
         width: "100%",
         height: "100%",
-        autostart: false
+        autostart: false,
+        androidhls: true,
+        hlsjsdefault: true,
+        primary: 'html5'
       });
       
       player.on('ready', () => {
@@ -346,7 +349,7 @@
     const fallback = document.getElementById('fallbackPlayer');
     fallback.innerHTML = `
       <video controls autoplay playsinline style="width:100%;height:100%">
-        <source src="${CONFIG.streamUrl}" type="video/mp4">
+        <source src="${CONFIG.streamUrl}" type="application/x-mpegURL">
       </video>
     `;
     fallback.style.display = 'block';
